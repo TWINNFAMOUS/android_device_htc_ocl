@@ -1,0 +1,26 @@
+on property:ro.crypto.state=encrypted
+    chmod 0660 /dev/qseecom
+    chown system drmrpc /dev/qseecom
+    chmod 0664 /dev/ion
+    chown system system /dev/ion
+    
+on init
+    # Load Tuxera exfat module
+    insmod /system/lib/modules/texfat.ko
+
+on boot
+    start chargeled
+
+service chargeled /sbin/chargeled
+    disabled
+    seclabel u:r:healthd:s0
+
+service detect_key /sbin/detect_key
+    disabled
+    seclabel u:r:healthd:s0
+    oneshot
+
+service offmode_charging /sbin/offmode_charging
+    disabled
+    seclabel u:r:healthd:s0
+
